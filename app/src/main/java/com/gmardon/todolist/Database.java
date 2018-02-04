@@ -15,8 +15,11 @@ import java.util.ArrayList;
 public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "gmardon_todolist";
     private static final int DB_VER = 1;
-    public static final String DB_TABLE = "Task";
-    public static final String DB_COLUMN = "TaskName";
+    public static final String DB_TABLE = "tasks";
+    public static final String DB_COLUMN_ID = "id";
+    public static final String DB_COLUMN_NAME = "name";
+    public static final String DB_COLUMN_DESCRIPTION = "description";
+    public static final String DB_COLUMN_DUEDATE = "due_date";
 
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VER);
@@ -24,7 +27,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = String.format("CREATE TABLE %s (ID INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT NOT NULL);", DB_TABLE, DB_COLUMN);
+        String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT, %s varchar(256));", DB_TABLE, DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUEDATE);
         db.execSQL(query);
     }
 
@@ -35,27 +38,33 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertNewTask(String task) {
+    public void insertNewTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DB_COLUMN, task);
+        values.put(DB_COLUMN_NAME, task.getName());
+        values.put(DB_COLUMN_DESCRIPTION, task.getDescription());
+        values.put(DB_COLUMN_DUEDATE, task.getDueDate());
         db.insertWithOnConflict(DB_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
 
-    public void deleteTask(String task) {
+    public void deleteTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DB_TABLE, DB_COLUMN + " = ?", new String[]{task});
+        db.delete(DB_TABLE, DB_COLUMN_ID + " = ?", new String[]{String.valueOf(task.getId())});
         db.close();
     }
 
-    public ArrayList<String> getTaskList() {
-        ArrayList<String> taskList = new ArrayList<>();
+    public ArrayList<Task> getTaskList() {
+        ArrayList<Task> taskList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN}, null, null, null, null, null);
+        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUEDATE}, null, null, null, null, null);
         while (cursor.moveToNext()) {
-            int index = cursor.getColumnIndex(DB_COLUMN);
-            taskList.add(cursor.getString(index));
+            Task task = new Task(cursor.getInt(cursor.getColumnIndex(DB_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_DUEDATE)));
+
+            taskList.add(task);
         }
         cursor.close();
         db.close();

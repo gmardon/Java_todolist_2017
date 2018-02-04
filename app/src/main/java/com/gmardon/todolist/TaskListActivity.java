@@ -1,5 +1,6 @@
 package com.gmardon.todolist;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,27 +24,27 @@ import java.util.ArrayList;
  */
 public class TaskListActivity extends AppCompatActivity {
     Database database;
-    ArrayAdapter<String> mAdapter;
-    ListView lstTask;
+    ArrayAdapter<Task> adapter;
+    ListView taskListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_task_list);
         database = new Database(this);
-        lstTask = (ListView) findViewById(R.id.task_list);
-        loadTaskList();
+        taskListView = findViewById(R.id.task_list);
+        updateTaskList();
     }
 
-    private void loadTaskList() {
-        ArrayList<String> taskList = database.getTaskList();
-        if (mAdapter == null) {
-            mAdapter = new ArrayAdapter<String>(this, R.layout.row, R.id.task_title, taskList);
-            lstTask.setAdapter(mAdapter);
+    private void updateTaskList() {
+        ArrayList<Task> taskList = database.getTaskList();
+        if (adapter == null) {
+            adapter = new TaskListAdapter(this, R.layout.task_list_entry, taskList);
+            taskListView.setAdapter(adapter);
         } else {
-            mAdapter.clear();
-            mAdapter.addAll(taskList);
-            mAdapter.notifyDataSetChanged();
+            adapter.clear();
+            adapter.addAll(taskList);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -60,17 +62,27 @@ public class TaskListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_task:
-                final EditText taskEditText = new EditText(this);
+                final EditText taskNameEditText = new EditText(this);
+                final EditText taskDescriptionEditText = new EditText(this);
+                Context context = this.getApplicationContext();
+                LinearLayout layout = new LinearLayout(context);
+                layout.addView(taskNameEditText);
+                layout.addView(taskDescriptionEditText);
+
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle("Add New Task")
                         .setMessage("What do you want to do next?")
-                        .setView(taskEditText)
+                        .setView(layout)
                         .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String task = String.valueOf(taskEditText.getText());
+                                Task task = new Task(
+                                        String.valueOf(taskNameEditText.getText()),
+                                        String.valueOf(taskDescriptionEditText.getText()),
+                                        "");
+                                //String task = String.valueOf(taskEditText.getText());
                                 database.insertNewTask(task);
-                                loadTaskList();
+                                updateTaskList();
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -86,7 +98,7 @@ public class TaskListActivity extends AppCompatActivity {
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
         Log.e("String", (String) taskTextView.getText());
         String task = String.valueOf(taskTextView.getText());
-        database.deleteTask(task);
-        loadTaskList();
+        //database.deleteTask(task);
+        updateTaskList();
     }
 }
