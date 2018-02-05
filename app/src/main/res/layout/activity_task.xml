@@ -58,6 +58,7 @@
         android:text="" />
 
     <EditText
+        android:visibility="invisible"
         android:id="@+id/task_due_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,6 +67,7 @@
         android:inputType="time" />
 
     <EditText
+        android:visibility="invisible"
         android:id="@+id/task_due_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
