@@ -60,7 +60,8 @@ public class TaskActivity extends AppCompatActivity {
                 Task task = new Task(
                         ((TextView) parent.findViewById(R.id.task_name)).getText().toString(),
                         ((TextView) parent.findViewById(R.id.task_description)).getText().toString(),
-                        "");
+                        "",
+                        false);
                 database.insertNewTask(task);
                 setResult(Activity.RESULT_OK);
                 finish();

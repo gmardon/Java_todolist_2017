@@ -6,25 +6,27 @@ import android.os.Parcelable;
 /**
  * Created by gmardon on 02/02/18.
  */
-
 public class Task implements Parcelable {
     private int id;
     private String name;
     private String description;
     private String dueDate;
+    private boolean isDone;
 
-    public Task(String name, String description, String dueDate) {
+    public Task(String name, String description, String dueDate, boolean isDone) {
         this.id = 0;
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.isDone = isDone;
     }
 
-    public Task(int id, String name, String description, String dueDate) {
+    public Task(int id, String name, String description, String dueDate, boolean isDone) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
+        this.isDone = isDone;
     }
 
     protected Task(Parcel in) {
@@ -32,6 +34,7 @@ public class Task implements Parcelable {
         name = in.readString();
         description = in.readString();
         dueDate = in.readString();
+        isDone = in.readByte() == 1;
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -82,6 +85,14 @@ public class Task implements Parcelable {
         this.dueDate = dueDate;
     }
 
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,5 +104,6 @@ public class Task implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(dueDate);
+        dest.writeByte((byte) (isDone ? 1 : 0));
     }
 }

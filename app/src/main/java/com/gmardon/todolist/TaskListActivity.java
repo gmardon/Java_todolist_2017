@@ -70,32 +70,6 @@ public class TaskListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_task:
-                /*
-                final EditText taskNameEditText = new EditText(this);
-                final EditText taskDescriptionEditText = new EditText(this);
-                Context context = this.getApplicationContext();
-                LinearLayout layout = new LinearLayout(context);
-                layout.addView(taskNameEditText);
-                layout.addView(taskDescriptionEditText);
-
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle("Add New Task")
-                        .setMessage("What do you want to do next?")
-                        .setView(layout)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Task task = new Task(
-                                        String.valueOf(taskNameEditText.getText()),
-                                        String.valueOf(taskDescriptionEditText.getText()),
-                                        "due date");
-                                database.insertNewTask(task);
-                                updateTaskList();
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();*/
                 Intent intent = new Intent(this, TaskActivity.class);
                 startActivity(intent);
                 return true;
@@ -105,7 +79,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
-        TextView taskIdView = view.findViewById(R.id.task_list_id);
+        TextView taskIdView = parent.findViewById(R.id.task_list_id);
         Task task = database.getTaskList().stream()
                 .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
         database.deleteTask(task);
@@ -115,7 +89,6 @@ public class TaskListActivity extends AppCompatActivity {
     public void editTask(View view) {
         View parent = (View) view.getParent();
         TextView taskIdView = view.findViewById(R.id.task_list_id);
-        Log.println(Log.ERROR, "TASK", String.valueOf(taskIdView.getText()));
         Task task = database.getTaskList().stream()
                 .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
         Intent intent = new Intent(this, TaskActivity.class);

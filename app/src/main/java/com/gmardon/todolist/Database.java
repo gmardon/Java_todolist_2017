@@ -18,7 +18,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String DB_COLUMN_ID = "id";
     public static final String DB_COLUMN_NAME = "name";
     public static final String DB_COLUMN_DESCRIPTION = "description";
-    public static final String DB_COLUMN_DUEDATE = "due_date";
+    public static final String DB_COLUMN_DUE_DATE = "due_date";
+    public static final String DB_COLUMN_IS_DONE = "is_done";
 
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VER);
@@ -26,7 +27,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT, %s varchar(256));", DB_TABLE, DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUEDATE);
+        String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT, %s varchar(256), %s varchar(1));", DB_TABLE, DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE, DB_COLUMN_IS_DONE);
         db.execSQL(query);
     }
 
@@ -42,7 +43,8 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DB_COLUMN_NAME, task.getName());
         values.put(DB_COLUMN_DESCRIPTION, task.getDescription());
-        values.put(DB_COLUMN_DUEDATE, task.getDueDate());
+        values.put(DB_COLUMN_DUE_DATE, task.getDueDate());
+        values.put(DB_COLUMN_IS_DONE, task.isDone() ? "1" : "0");
         db.insertWithOnConflict(DB_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
     }
@@ -52,7 +54,8 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DB_COLUMN_NAME, task.getName());
         values.put(DB_COLUMN_DESCRIPTION, task.getDescription());
-        values.put(DB_COLUMN_DUEDATE, task.getDueDate());
+        values.put(DB_COLUMN_DUE_DATE, task.getDueDate());
+        values.put(DB_COLUMN_IS_DONE, task.isDone() ? "1" : "0");
         db.update(DB_TABLE, values, DB_COLUMN_ID + " = ?", new String[]{String.valueOf(task.getId())});
         db.close();
     }
@@ -66,13 +69,13 @@ public class Database extends SQLiteOpenHelper {
     public ArrayList<Task> getTaskList() {
         ArrayList<Task> taskList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUEDATE}, null, null, null, null, null);
+        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Task task = new Task(cursor.getInt(cursor.getColumnIndex(DB_COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_DESCRIPTION)),
-                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_DUEDATE)));
-
+                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_DUE_DATE)),
+                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_IS_DONE)) == "1");
             taskList.add(task);
         }
         cursor.close();
