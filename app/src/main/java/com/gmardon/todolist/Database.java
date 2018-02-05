@@ -69,7 +69,7 @@ public class Database extends SQLiteOpenHelper {
     public ArrayList<Task> getTaskList() {
         ArrayList<Task> taskList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE}, null, null, null, null, null);
+        Cursor cursor = db.query(DB_TABLE, new String[]{DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE, DB_COLUMN_IS_DONE}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             Task task = new Task(cursor.getInt(cursor.getColumnIndex(DB_COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_NAME)),

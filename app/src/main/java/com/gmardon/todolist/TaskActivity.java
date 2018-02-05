@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,15 +31,14 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         database = new Database(this);
-
         ArrayList<Task> tasks = getIntent().getParcelableArrayListExtra("task");
         if (tasks != null && tasks.size() == 1) {
             this.task = tasks.get(0);
             ((TextView) findViewById(R.id.task_id)).setText(String.valueOf(this.task.getId()));
             ((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
             ((TextView) findViewById(R.id.task_description)).setText(this.task.getDescription());
+            ((CheckBox) findViewById(R.id.task_is_done)).setChecked(this.task.isDone());
             //((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
             this.mode = TaskModeEnum.Edit;
             this.pageTitle = "Edit task";
@@ -61,13 +61,16 @@ public class TaskActivity extends AppCompatActivity {
                         ((TextView) parent.findViewById(R.id.task_name)).getText().toString(),
                         ((TextView) parent.findViewById(R.id.task_description)).getText().toString(),
                         "",
-                        false);
+                        ((CheckBox) parent.findViewById(R.id.task_is_done)).isChecked());
                 database.insertNewTask(task);
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;
-
             case Edit:
+                this.task.setName(String.valueOf(((TextView) parent.findViewById(R.id.task_name)).getText()));
+                this.task.setDescription(String.valueOf(((TextView) parent.findViewById(R.id.task_description)).getText()));
+                this.task.setDone(((CheckBox) parent.findViewById(R.id.task_is_done)).isChecked());
+                //this.task.setDone(String.valueOf(((TextView) parent.findViewById(R.id.task_id)).getText()));
                 database.updateTask(this.task);
                 setResult(Activity.RESULT_OK);
                 finish();
