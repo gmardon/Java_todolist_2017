@@ -45,7 +45,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         Task item = getItem(position);
-        if (item!= null) {
+        if (item != null) {
             viewHolder.taskId.setText(String.format("%d", item.getId()));
             viewHolder.taskTitle.setText(String.format("%s", item.getName()));
             viewHolder.taskDescription.setText(String.format("%s", item.getDescription()));

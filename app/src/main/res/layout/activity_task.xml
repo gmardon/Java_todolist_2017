@@ -25,6 +25,12 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:id="@+id/task_id"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:visibility="invisible" />
+
     <EditText
         android:id="@+id/task_name"
         android:layout_width="match_parent"
@@ -45,15 +51,15 @@
         android:text="" />
 
     <EditText
-        android:id="@+id/due_time"
+        android:id="@+id/task_due_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/due_date"
+        android:layout_below="@+id/task_due_date"
         android:ems="10"
         android:inputType="time" />
 
     <EditText
-        android:id="@+id/due_date"
+        android:id="@+id/task_due_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -65,7 +71,7 @@
         android:id="@+id/action_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/due_time"
+        android:layout_below="@+id/task_due_time"
         android:layout_centerHorizontal="true"
         android:text=""
         android:onClick="actionTask"/>

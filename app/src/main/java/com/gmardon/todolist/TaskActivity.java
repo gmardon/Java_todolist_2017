@@ -13,9 +13,8 @@ import java.util.ArrayList;
 /**
  * Created by gmardon on 04/02/2018.
  */
-
 enum TaskModeEnum {
-    Create, Edit;
+    Create, Edit
 }
 
 public class TaskActivity extends AppCompatActivity {
@@ -37,9 +36,9 @@ public class TaskActivity extends AppCompatActivity {
         ArrayList<Task> tasks = getIntent().getParcelableArrayListExtra("task");
         if (tasks != null && tasks.size() == 1) {
             this.task = tasks.get(0);
+            ((TextView) findViewById(R.id.task_id)).setText(String.valueOf(this.task.getId()));
             ((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
-            ((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
-            ((TextView) findViewById(R.id.task_description)).setText(this.task.getName());
+            ((TextView) findViewById(R.id.task_description)).setText(this.task.getDescription());
             //((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
             this.mode = TaskModeEnum.Edit;
             this.pageTitle = "Edit task";
