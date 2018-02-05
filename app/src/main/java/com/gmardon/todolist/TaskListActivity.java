@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -41,7 +43,6 @@ public class TaskListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
         database = new Database(this);
         taskListView = findViewById(R.id.task_list);
-        //updateTaskList();
     }
 
     private void updateTaskList() {
@@ -80,8 +81,7 @@ public class TaskListActivity extends AppCompatActivity {
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
         TextView taskIdView = parent.findViewById(R.id.task_list_id);
-        Task task = database.getTaskList().stream()
-                .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
+        Task task = database.getTaskById(Integer.parseInt(String.valueOf(taskIdView.getText())));
         database.deleteTask(task);
         updateTaskList();
     }
@@ -89,8 +89,7 @@ public class TaskListActivity extends AppCompatActivity {
     public void editTask(View view) {
         View parent = (View) view.getParent();
         TextView taskIdView = view.findViewById(R.id.task_list_id);
-        Task task = database.getTaskList().stream()
-                .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
+        Task task = database.getTaskById(Integer.parseInt(String.valueOf(taskIdView.getText())));
         Intent intent = new Intent(this, TaskActivity.class);
         intent.putParcelableArrayListExtra("task", new ArrayList<Parcelable>() {{
             add(task);

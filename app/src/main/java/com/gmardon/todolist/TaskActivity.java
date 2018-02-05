@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -39,6 +40,8 @@ public class TaskActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
             ((TextView) findViewById(R.id.task_description)).setText(this.task.getDescription());
             ((CheckBox) findViewById(R.id.task_is_done)).setChecked(this.task.isDone());
+            Log.println(Log.ERROR, "ON_RECEIVE_TASK_FOR_EDITION-IS-DONE?", String.valueOf(this.task.isDone()));
+
             //((TextView) findViewById(R.id.task_name)).setText(this.task.getName());
             this.mode = TaskModeEnum.Edit;
             this.pageTitle = "Edit task";
@@ -70,6 +73,8 @@ public class TaskActivity extends AppCompatActivity {
                 this.task.setName(String.valueOf(((TextView) parent.findViewById(R.id.task_name)).getText()));
                 this.task.setDescription(String.valueOf(((TextView) parent.findViewById(R.id.task_description)).getText()));
                 this.task.setDone(((CheckBox) parent.findViewById(R.id.task_is_done)).isChecked());
+
+                Log.println(Log.ERROR, "AFTER_EDIT-TASK-ACTION-IS-DONE?", String.valueOf(this.task.isDone()));
                 //this.task.setDone(String.valueOf(((TextView) parent.findViewById(R.id.task_id)).getText()));
                 database.updateTask(this.task);
                 setResult(Activity.RESULT_OK);

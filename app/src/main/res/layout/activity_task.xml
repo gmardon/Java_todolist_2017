@@ -36,8 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appBarLayout"
-        android:layout_gravity="left"
-        android:orientation="vertical"
         android:text="Done ?" />
 
     <EditText
@@ -45,10 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_is_done"
-        android:layout_gravity="right"
         android:ems="10"
         android:hint="Task name"
-        android:orientation="vertical"
         android:text="" />
 
     <EditText

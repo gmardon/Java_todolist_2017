@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT, %s varchar(256), %s varchar(1));", DB_TABLE, DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE, DB_COLUMN_IS_DONE);
+        String query = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL, %s TEXT, %s varchar(256), %s boolean);", DB_TABLE, DB_COLUMN_ID, DB_COLUMN_NAME, DB_COLUMN_DESCRIPTION, DB_COLUMN_DUE_DATE, DB_COLUMN_IS_DONE);
         db.execSQL(query);
     }
 
@@ -36,6 +37,11 @@ public class Database extends SQLiteOpenHelper {
         String query = String.format("DELETE TABLE IF EXISTS %s", DB_TABLE);
         db.execSQL(query);
         onCreate(db);
+    }
+
+    public Task getTaskById(int id) {
+        return this.getTaskList().stream()
+                .filter((t) -> t.getId() == id).findFirst().get();
     }
 
     public void insertNewTask(Task task) {
@@ -75,7 +81,7 @@ public class Database extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_DESCRIPTION)),
                     cursor.getString(cursor.getColumnIndex(DB_COLUMN_DUE_DATE)),
-                    cursor.getString(cursor.getColumnIndex(DB_COLUMN_IS_DONE)) == "1");
+                    cursor.getShort(cursor.getColumnIndex(DB_COLUMN_IS_DONE)) == 1);
             taskList.add(task);
         }
         cursor.close();
