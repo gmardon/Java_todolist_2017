@@ -1,14 +1,21 @@
 package com.gmardon.todolist;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class TaskActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+/**
+ * Created by gmardon on 04/02/2018.
+ */
+public class TaskActivity extends AppCompatActivity {
+    private Task task;
+    private String pageTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,14 +23,13 @@ public class TaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        ArrayList<Task> tasks = getIntent().getParcelableArrayListExtra("task");
+        if (tasks != null && tasks.size() == 1) {
+            this.task = tasks.get(0);
+            this.pageTitle = "Edit task";
+        } else {
+            this.pageTitle = "Create task";
+            this.task = new Task();
+        }
     }
-
 }

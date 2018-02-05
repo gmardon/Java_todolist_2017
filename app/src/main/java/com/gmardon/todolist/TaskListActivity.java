@@ -2,8 +2,10 @@ package com.gmardon.todolist;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by gmardon on 02/02/2018.
+ * Created by gmardon on 04/02/2018.
  */
 public class TaskListActivity extends AppCompatActivity {
     Database database;
@@ -62,6 +64,7 @@ public class TaskListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_task:
+                /*
                 final EditText taskNameEditText = new EditText(this);
                 final EditText taskDescriptionEditText = new EditText(this);
                 Context context = this.getApplicationContext();
@@ -79,15 +82,16 @@ public class TaskListActivity extends AppCompatActivity {
                                 Task task = new Task(
                                         String.valueOf(taskNameEditText.getText()),
                                         String.valueOf(taskDescriptionEditText.getText()),
-                                        "");
-                                //String task = String.valueOf(taskEditText.getText());
+                                        "due date");
                                 database.insertNewTask(task);
                                 updateTaskList();
                             }
                         })
                         .setNegativeButton("Cancel", null)
                         .create();
-                dialog.show();
+                dialog.show();*/
+                Intent intent = new Intent(this, TaskActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,10 +99,22 @@ public class TaskListActivity extends AppCompatActivity {
 
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
-        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        Log.e("String", (String) taskTextView.getText());
-        String task = String.valueOf(taskTextView.getText());
-        //database.deleteTask(task);
+        final TextView taskIdView = (TextView) parent.findViewById(R.id.task_id);
+        Task task = database.getTaskList().stream()
+                .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
+        database.deleteTask(task);
         updateTaskList();
+    }
+
+    public void editTask(View view) {
+        View parent = (View) view.getParent();
+        final TextView taskIdView = (TextView) parent.findViewById(R.id.task_id);
+        Task task = database.getTaskList().stream()
+                .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
+        Intent intent = new Intent(this, TaskActivity.class);
+        intent.putParcelableArrayListExtra("tasks", new ArrayList<Parcelable>() {{
+            add(task);
+        }});
+        startActivity(intent);
     }
 }

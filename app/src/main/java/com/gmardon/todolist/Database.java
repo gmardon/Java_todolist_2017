@@ -9,9 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 /**
- * Created by gmardon on 02/02/2018.
+ * Created by gmardon on 04/02/2018.
  */
-
 public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "gmardon_todolist";
     private static final int DB_VER = 1;

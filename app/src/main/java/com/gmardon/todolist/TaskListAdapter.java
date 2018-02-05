@@ -10,13 +10,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by gmardon on 05/02/18.
+ * Created by gmardon on 04/02/18.
  */
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
 
     private static class ViewHolder {
-        private TextView itemView;
+        private TextView taskId;
+        private TextView taskTitle;
+        private TextView taskDescription;
+        private TextView taskDueDate;
     }
 
     private ViewHolder viewHolder;
@@ -32,8 +35,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     .inflate(R.layout.task_list_entry, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.itemView = (TextView) convertView.findViewById(R.id.task_title);
-
+            viewHolder.taskId = convertView.findViewById(R.id.task_id);
+            viewHolder.taskTitle = convertView.findViewById(R.id.task_title);
+            viewHolder.taskDescription = convertView.findViewById(R.id.task_description);
+            viewHolder.taskDueDate = convertView.findViewById(R.id.task_due_date);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -41,11 +46,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         Task item = getItem(position);
         if (item!= null) {
-            // My layout has only one TextView
-            // do whatever you want with your string and long
-            viewHolder.itemView.setText(String.format("%s", item.getName()));
+            viewHolder.taskId.setText(String.format("%d", item.getId()));
+            viewHolder.taskTitle.setText(String.format("%s", item.getName()));
+            viewHolder.taskDescription.setText(String.format("%s", item.getDescription()));
+            viewHolder.taskDueDate.setText(String.format("%s", item.getDueDate()));
         }
-
         return convertView;
     }
 }
