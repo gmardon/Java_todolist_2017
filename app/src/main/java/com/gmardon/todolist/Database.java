@@ -47,6 +47,16 @@ public class Database extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DB_COLUMN_NAME, task.getName());
+        values.put(DB_COLUMN_DESCRIPTION, task.getDescription());
+        values.put(DB_COLUMN_DUEDATE, task.getDueDate());
+        db.update(DB_TABLE, values, DB_COLUMN_ID + " = ?", new String[]{String.valueOf(task.getId())});
+        db.close();
+    }
+
     public void deleteTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DB_TABLE, DB_COLUMN_ID + " = ?", new String[]{String.valueOf(task.getId())});

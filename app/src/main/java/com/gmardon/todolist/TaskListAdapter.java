@@ -35,10 +35,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     .inflate(R.layout.task_list_entry, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.taskId = convertView.findViewById(R.id.task_id);
-            viewHolder.taskTitle = convertView.findViewById(R.id.task_title);
-            viewHolder.taskDescription = convertView.findViewById(R.id.task_description);
-            viewHolder.taskDueDate = convertView.findViewById(R.id.task_due_date);
+            viewHolder.taskId = convertView.findViewById(R.id.task_list_id);
+            viewHolder.taskTitle = convertView.findViewById(R.id.task_list_title);
+            viewHolder.taskDescription = convertView.findViewById(R.id.task_list_description);
+            viewHolder.taskDueDate = convertView.findViewById(R.id.task_list_due_date);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

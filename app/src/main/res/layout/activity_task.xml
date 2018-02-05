@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,27 +7,67 @@
     tools:context="com.gmardon.todolist.TaskActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
+
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/editText"
+            android:layout_weight="1"
             android:background="?attr/colorPrimary"
+            android:baselineAligned="false"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_task" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/task_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_marginTop="50sp"
+        android:ems="10"
+        android:hint="Task name"
+        android:text="" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <EditText
+        android:id="@+id/task_description"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_below="@+id/task_name"
+        android:ems="10"
+        android:hint="Task description"
+        android:singleLine="false"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/due_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/due_date"
+        android:ems="10"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/due_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/task_description"
+        android:ems="10"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/action_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/due_time"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:onClick="actionTask"/>
+
+</RelativeLayout>

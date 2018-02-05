@@ -30,12 +30,18 @@ public class TaskListActivity extends AppCompatActivity {
     ListView taskListView;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        updateTaskList();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
         database = new Database(this);
         taskListView = findViewById(R.id.task_list);
-        updateTaskList();
+        //updateTaskList();
     }
 
     private void updateTaskList() {
@@ -99,7 +105,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
-        final TextView taskIdView = (TextView) parent.findViewById(R.id.task_id);
+        TextView taskIdView = view.findViewById(R.id.task_list_id);
         Task task = database.getTaskList().stream()
                 .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
         database.deleteTask(task);
@@ -108,11 +114,12 @@ public class TaskListActivity extends AppCompatActivity {
 
     public void editTask(View view) {
         View parent = (View) view.getParent();
-        final TextView taskIdView = (TextView) parent.findViewById(R.id.task_id);
+        TextView taskIdView = view.findViewById(R.id.task_list_id);
+        Log.println(Log.ERROR, "TASK", String.valueOf(taskIdView.getText()));
         Task task = database.getTaskList().stream()
                 .filter((t) -> t.getId() == Integer.parseInt(String.valueOf(taskIdView.getText()))).findFirst().get();
         Intent intent = new Intent(this, TaskActivity.class);
-        intent.putParcelableArrayListExtra("tasks", new ArrayList<Parcelable>() {{
+        intent.putParcelableArrayListExtra("task", new ArrayList<Parcelable>() {{
             add(task);
         }});
         startActivity(intent);
