@@ -48,7 +48,7 @@ public class TaskListActivity extends AppCompatActivity {
     private void updateTaskList() {
         ArrayList<Task> taskList = database.getTaskList();
         if (adapter == null) {
-            adapter = new TaskListAdapter(this, R.layout.task_list_entry, taskList);
+            adapter = new TaskListAdapter(database, this, R.layout.task_list_entry, taskList);
             taskListView.setAdapter(adapter);
         } else {
             adapter.clear();

@@ -25,9 +25,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     }
 
     private ViewHolder viewHolder;
+    private Database database;
 
-    public TaskListAdapter(Context context, int textViewResourceId, ArrayList<Task> items) {
+    public TaskListAdapter(final Database database, Context context, int textViewResourceId, ArrayList<Task> items) {
         super(context, textViewResourceId, items);
+        this.database = database;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,7 +55,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             CheckBox taskCheckbox = convertView.findViewById(R.id.task_list_is_done);
             int id = Integer.valueOf(String.valueOf(((TextView) convertView.findViewById(R.id.task_list_id)).getText()));
             taskCheckbox.setOnCheckedChangeListener((view, isChecked) -> {
-                Database database = new Database(this.getContext());
                 Task task = database.getTaskById(id);
                 task.setDone(isChecked);
                 database.updateTask(task);
