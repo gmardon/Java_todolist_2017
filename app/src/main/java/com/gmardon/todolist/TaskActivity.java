@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 enum TaskModeEnum {
     Create, Edit
-}
+} 
 
 public class TaskActivity extends AppCompatActivity {
     private Task task;
